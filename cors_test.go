@@ -2,6 +2,8 @@ package cors
 
 import (
 	"io"
+	"net/http"
+	"net/http/httptest"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,4 +35,20 @@ func newTestRouter(opts Options) *gin.Engine {
 		c.String(200, "patch")
 	})
 	return router
+}
+
+func request(server *gin.Engine, opts requestOptions) *httptest.ResponseRecorder {
+
+	w := httptest.NewRecorder()
+	req, err := http.NewRequest(opts.Method, opts.URL, opts.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	for k, v := range opts.Headers {
+		req.Header.Set(k, v)
+	}
+
+	server.ServeHTTP(w, req)
+	return w
 }
