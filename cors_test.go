@@ -4,6 +4,9 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/gin-gonic/gin"
 )
@@ -51,4 +54,19 @@ func request(server *gin.Engine, opts requestOptions) *httptest.ResponseRecorder
 
 	server.ServeHTTP(w, req)
 	return w
+}
+
+func TestDefault(t *testing.T) {
+	r := newTestRouter(Options{})
+	assert := assert.New(t)
+
+	req := request(r, requestOptions{
+		URL: "/",
+		Headers: map[string]string{
+			"Origin": "http://test.com",
+		},
+	})
+
+	assert.Equal("http://test.com", req.Header().Get("Access-Control-Allow-Origin"))
+	assert.Equal("get", req.Body.String())
 }
