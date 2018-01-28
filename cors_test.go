@@ -1,8 +1,17 @@
 package cors
 
 import (
+	"io"
+
 	"github.com/gin-gonic/gin"
 )
+
+type requestOptions struct {
+	Method  string
+	URL     string
+	Headers map[string]string
+	Body    io.Reader
+}
 
 func init() {
 	gin.SetMode(gin.TestMode)
