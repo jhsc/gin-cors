@@ -86,3 +86,19 @@ func TestAllowOrigins(t *testing.T) {
 	assert.Equal("http://test.com", req.Header().Get("Access-Control-Allow-Origin"))
 	assert.Equal("get", req.Body.String())
 }
+
+func TestAllowHeaders(t *testing.T) {
+	r := newTestRouter(Options{
+		ExposeHeaders: []string{"Foo", "Bar"},
+	})
+	assert := assert.New(t)
+
+	req := request(r, requestOptions{
+		URL: "/",
+		Headers: map[string]string{
+			"Origin": "http://test.com",
+		},
+	})
+	assert.Equal("Foo,Bar", req.Header().Get("Access-Control-Expose-Headers"))
+	assert.Equal("get", req.Body.String())
+}
