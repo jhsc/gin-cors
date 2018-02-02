@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -134,4 +135,20 @@ func TestAllowMethods(t *testing.T) {
 		},
 	})
 	assert.Equal("GET,POST,PUT", req.Header().Get("Access-Control-Allow-Methods"))
+}
+
+func TestMaxAge(t *testing.T) {
+	r := newTestRouter(Options{
+		MaxAge: time.Hour,
+	})
+	assert := assert.New(t)
+
+	req := request(r, requestOptions{
+		URL:    "/",
+		Method: "OPTIONS",
+		Headers: map[string]string{
+			"Origin": "http://test.com",
+		},
+	})
+	assert.Equal("3600", req.Header().Get("Access-Control-Max-Age"))
 }
