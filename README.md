@@ -17,14 +17,14 @@ import "github.com/jhsc/gin-cors"
 ### Example:
 ```go
 import (
-  "github.com/jhsc/gin-cors"
-  "github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
+    "github.com/jhsc/gin-cors"
 )
 
-func main() {
-  g := gin.New()
-  g.Use(cors.Options{
-		AllowOrigins: []string{"http://test.com"},
-	})
+func main(){
+    g := gin.New()
+    g.Use(cors.Middleware(cors.Options{
+      AllowOrigins: []string{"http://test.com"},
+    }))
 }
 ```
