@@ -152,3 +152,20 @@ func TestMaxAge(t *testing.T) {
 	})
 	assert.Equal("3600", req.Header().Get("Access-Control-Max-Age"))
 }
+
+func TestRequestMethod(t *testing.T) {
+	r := newTestRouter(Options{
+		AllowMethods: []string{},
+	})
+	assert := assert.New(t)
+
+	req := request(r, requestOptions{
+		URL:    "/",
+		Method: "OPTIONS",
+		Headers: map[string]string{
+			"Origin":                        "http://test.com",
+			"Access-Control-Request-Method": "PUT",
+		},
+	})
+	assert.Equal("PUT", req.Header().Get("Access-Control-Allow-Methods"))
+}
