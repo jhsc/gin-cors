@@ -15,3 +15,16 @@ import "github.com/jhsc/gin-cors"
 ```
 
 ### Example:
+```go
+import (
+  "github.com/jhsc/gin-cors"
+  "github.com/gin-gonic/gin"
+)
+
+func main() {
+  g := gin.New()
+  g.Use(cors.Options{
+		AllowOrigins: []string{"http://test.com"},
+	})
+}
+```
